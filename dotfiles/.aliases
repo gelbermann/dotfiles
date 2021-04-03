@@ -1,0 +1,87 @@
+## general
+alias gistory='history | grep'
+alias gh='gistory'
+alias h='history'
+alias g='grep'
+alias c='clear'
+alias sb='source ~/.bashrc'
+alias reload='source ~/.zshrc'
+alias zshconfig='nano ~/.zshrc'
+alias please='sudo'
+alias up='cd -'
+alias ods='onedrive --synchronize'
+alias odsl='onedrive --synchronize --local-first'
+alias sshpi='ssh -l pi -p 2121 raspberry.home.kg'
+alias sshcsl2='ssh gelbermann@csl2.cs.technion.ac.il'
+alias sshcsl3='ssh gelbermann@csl3.cs.technion.ac.il'
+alias sysupdate='sudo apt update && sudo apt upgrade -y'
+alias anaconda='source ~/.conda-bashrc'
+alias e='ll > /dev/null'
+alias mkdir='mkdir -p'
+function mkdir_new {
+  mkdir $1;
+  cd $1;
+}
+alias mkdn='mkdir_new'
+parse_git_branch() {	# useful for PS1 settings
+        git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/[\1]/'
+}
+alias k='k --human'
+alias ll='ls -lha'
+
+## python
+alias ptimeit='python -m timeit -s'
+alias pym='python3 manage.py'
+alias mkenv='python3 -m venv env'
+alias s='source env/bin/activate && which python3'
+alias d='deactivate'
+
+## LyX
+alias reverse='python ~/dev/scripts/rev_words.py'  # useful for inserting hebrew strings into math-mode in LyX
+
+## git
+alias gsv='git status'
+alias gss='git status -s'
+alias gc='git commit -m'
+alias gcv='git commit'
+# alias ga='git add'
+alias gb='git branch -v'
+alias gca='git commit --amend'
+alias gg='git log --graph --oneline'
+alias ggv='git log --graph'
+alias ggraph='git log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"'
+# alias gd='git diff --staged'
+alias gd='ydiff -s -w 0 --wrap'
+alias glc='git show --stat -1'
+alias gco='git checkout'
+alias gmeld='bash -c "meld . &" > /dev/null'
+alias gdiff='denv; bash -c "diffuse --modified & > /dev/null"; senv'
+
+# git staging/unstaging
+alias gst="unbuffer git status -s | cat -n"
+stage() {
+        for file in $*; do
+                git add `gst | sed -n "${file}"p | awk -F " " '{ print $3 }'`;
+        done
+        gst;
+}
+unstage() {
+        for file in $*; do
+                git reset HEAD `gst | sed -n "${file}"p | awk -F " " '{ print $3 }'` --quiet;
+        done
+        gst;
+}
+alias gs='stage'
+alias gu='unstage'
+differ() {
+        for file in $*; do
+                gd `gst | sed -n "${file}"p | awk -F " " '{ print $3 }'`;
+        done
+}
+differCached() {
+        for file in $*; do
+                gd --cached `gst | sed -n "${file}"p | awk -F " " '{ print $3 }'`;
+        done
+}
+alias gdf='differ'
+alias gdfc='differCached'
